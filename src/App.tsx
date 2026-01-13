@@ -6,9 +6,21 @@ function App() {
   const [clicks, setClicks] = useState(0)
   const [message, setMessage] = useState('Cargando...')
   const [name, setName] = useState('')
+  const [error, setError] = useState('')
 
   function handleClick() {
     setClicks(clicks + 1)
+  }
+
+  function handleSubmit() {
+    if (name.trim() === '') {
+      setError('El nombre no puede estar vacío')
+      return
+    }
+
+    setError('')
+    alert(`Nombre enviado: ${name}`)
+    setName('')
   }
 
   useEffect(() => {
@@ -44,9 +56,11 @@ function App() {
         />
       </div>
 
-      <button onClick={() => alert(`Nombre enviado: ${name}`)}>
+      <button onClick={handleSubmit}>
         Enviar
       </button>
+
+      {error && <p style={{ color: 'red'}}>{error}</p>}
 
       <p>Hola, {name}</p>
 
