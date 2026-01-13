@@ -5,6 +5,7 @@ import Card from './components/Card'
 function App() {
   const [clicks, setClicks] = useState(0)
   const [message, setMessage] = useState('Cargando...')
+  const [name, setName] = useState('')
 
   function handleClick() {
     setClicks(clicks + 1)
@@ -33,6 +34,21 @@ function App() {
       <button onClick={handleClick}>
         Haz click
       </button>
+
+      <div>
+        <input
+          type="text"
+          placeholder="Escribe tu nombre"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
+
+      <button onClick={() => alert(`Nombre enviado: ${name}`)}>
+        Enviar
+      </button>
+
+      <p>Hola, {name}</p>
 
       <Card
         title="Frontend"
