@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Header from './components/Header'
 import Card from './components/Card'
+import UserList from './components/UserList'
 
 function App() {
   const [clicks, setClicks] = useState(0)
@@ -101,15 +102,11 @@ function App() {
 
       <h2>Usuarios</h2>
 
-      {!loading && !apiError && (
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>
-            {user.name} - {user.email}
-          </li>
-        ))}
-      </ul>
-      )}
+      <UserList
+        users={users}
+        loading={loading}
+        error={apiError}
+      />
 
       <Card
         title="Frontend"
