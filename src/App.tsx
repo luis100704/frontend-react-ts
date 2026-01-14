@@ -8,6 +8,14 @@ function App() {
   const [name, setName] = useState('')
   const [error, setError] = useState('')
 
+  type User = {
+    id: number
+    name: string
+    email: string
+  }
+
+  const [users, setUsers] = useState<User[]>([])
+
   function handleClick() {
     setClicks(clicks + 1)
   }
@@ -36,6 +44,14 @@ function App() {
       setMessage('Datos cargados correctamente')
     }, 1500)
   }, [])
+
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then((response) => response.json())
+    .then((data) => {
+      setUsers(data)
+    })
+  }, [])
   
   return (
     <div>
@@ -63,6 +79,16 @@ function App() {
       {error && <p style={{ color: 'red'}}>{error}</p>}
 
       <p>Hola, {name}</p>
+
+      <h2>Usuarios</h2>
+
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>
+            {user.name} - {user.email}
+          </li>
+        ))}
+      </ul>
 
       <Card
         title="Frontend"
