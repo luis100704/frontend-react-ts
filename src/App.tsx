@@ -2,22 +2,14 @@ import { useState, useEffect } from 'react'
 import Header from './components/layout/Header'
 import Card from './components/ui/Card'
 import UserList from './components/users/UserList'
+import useUsers from './hooks/useUsers'
 
 function App() {
   const [clicks, setClicks] = useState(0)
   const [message, setMessage] = useState('Cargando...')
   const [name, setName] = useState('')
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [apiError, setApiError] = useState('')
-
-  type User = {
-    id: number
-    name: string
-    email: string
-  }
-
-  const [users, setUsers] = useState<User[]>([])
+  const { users, loading, usersError } = useUsers()
 
   function handleClick() {
     setClicks(clicks + 1)
@@ -47,28 +39,6 @@ function App() {
       setMessage('Datos cargados correctamente')
     }, 1500)
   }, [])
-
-  useEffect(() => {
-    setLoading(true)
-    setApiError('')
-
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Error al cargar usuarios')
-        }
-        return response.json()
-      })
-      .then((data) => {
-        setUsers(data)
-      })
-      .catch(() => {
-        setApiError('No se pudieron cargar los usuarios')
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  },  [])
   
   return (
     <div>
@@ -98,14 +68,14 @@ function App() {
       <p>Hola, {name}</p>
 
       {loading && <p>Cargando usuarios...</p>}
-      {apiError && <p style={{ color: 'red' }}>{apiError}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <h2>Usuarios</h2>
 
       <UserList
         users={users}
         loading={loading}
-        error={apiError}
+        error={usersError}
       />
 
       <Card
