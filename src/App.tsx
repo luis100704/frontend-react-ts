@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import Header from './components/Header'
-import Card from './components/Card'
-import UserList from './components/UserList'
+import Header from './components/layout/Header'
+import Card from './components/ui/Card'
+import UserList from './components/users/UserList'
 
 function App() {
   const [clicks, setClicks] = useState(0)
