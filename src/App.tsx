@@ -7,6 +7,8 @@ function App() {
   const [message, setMessage] = useState('Cargando...')
   const [name, setName] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [apiError, setApiError] = useState('')
 
   type User = {
     id: number
@@ -46,12 +48,26 @@ function App() {
   }, [])
 
   useEffect(() => {
+    setLoading(true)
+    setApiError('')
+
     fetch('https://jsonplaceholder.typicode.com/users')
-    .then((response) => response.json())
-    .then((data) => {
-      setUsers(data)
-    })
-  }, [])
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Error al cargar usuarios')
+        }
+        return response.json()
+      })
+      .then((data) => {
+        setUsers(data)
+      })
+      .catch(() => {
+        setApiError('No se pudieron cargar los usuarios')
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  },  [])
   
   return (
     <div>
@@ -80,8 +96,12 @@ function App() {
 
       <p>Hola, {name}</p>
 
+      {loading && <p>Cargando usuarios...</p>}
+      {apiError && <p style={{ color: 'red' }}>{apiError}</p>}
+
       <h2>Usuarios</h2>
 
+      {!loading && !apiError && (
       <ul>
         {users.map((user) => (
           <li key={user.id}>
@@ -89,6 +109,7 @@ function App() {
           </li>
         ))}
       </ul>
+      )}
 
       <Card
         title="Frontend"
