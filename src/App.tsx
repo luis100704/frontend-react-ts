@@ -8,7 +8,6 @@ import { AuthContext } from './context/AuthContext'
 import ProtectedContent from './components/layout/ProtectedContent'
 
 function App() {
-  const [clicks, setClicks] = useState(0)
   const [message, setMessage] = useState('Cargando...')
   const [name, setName] = useState('')
   const [error, setError] = useState('')
@@ -21,10 +20,6 @@ function App() {
   }
 
   const { user, login, logout } = auth
-
-  function handleClick() {
-    setClicks(clicks + 1)
-  }
 
   function handleSubmit() {
     if (name.trim() === '') {
@@ -40,10 +35,6 @@ function App() {
   useEffect(() => {
     console.log('La aplicación se ha cargado')
   }, [])
-
-  useEffect(() => {
-    console.log('Clicks actualizados:', clicks)
-  }, [clicks])  
   
   useEffect(() => {
     setTimeout(() => {
@@ -63,12 +54,6 @@ function App() {
       ): (
         <button onClick={() => login(name)}>Login</button>
       )}
-
-      <p>Clicks: {clicks}</p>
-
-      <button onClick={handleClick}>
-        Haz click
-      </button>
 
       <div>
         <input
@@ -104,13 +89,11 @@ function App() {
       <Card
         title="Frontend"
         description="Aplicación React con TypeScript"
-        clicks={clicks}
       />
 
       <Card
         title="Backend"
         description="API con Django y Django REST Framework"
-        clicks={clicks}
       />
 
       <p>{message}</p>
