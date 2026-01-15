@@ -3,6 +3,8 @@ import Header from './components/layout/Header'
 import Card from './components/ui/Card'
 import UserList from './components/users/UserList'
 import useUsers from './hooks/useUsers'
+import { useContext } from 'react'
+import { AuthContext } from './context/AuthContext'
 
 function App() {
   const [clicks, setClicks] = useState(0)
@@ -10,6 +12,14 @@ function App() {
   const [name, setName] = useState('')
   const [error, setError] = useState('')
   const { users, loading, usersError } = useUsers()
+
+  const auth = useContext(AuthContext)
+
+  if (!auth) {
+    return null
+  }
+
+  const { user, login, logout } = auth
 
   function handleClick() {
     setClicks(clicks + 1)
@@ -44,6 +54,15 @@ function App() {
     <div>
       <Header />
 
+      {user ? (
+        <div>
+          <p>Usuario logueado: {user}</p>
+          <button onClick={logout}>Logout</button>
+        </div>
+      ): (
+        <button onClick={() => login(name)}>Login</button>
+      )}
+
       <p>Clicks: {clicks}</p>
 
       <button onClick={handleClick}>
@@ -68,7 +87,7 @@ function App() {
       <p>Hola, {name}</p>
 
       {loading && <p>Cargando usuarios...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {usersError && <p style={{ color: 'red' }}>{usersError}</p>}
 
       <h2>Usuarios</h2>
 
