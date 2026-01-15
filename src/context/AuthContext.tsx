@@ -6,6 +6,7 @@ type AuthContextType = {
     logout: () => void
 }
 
+//Creación de un canal global llamado AuthContext que contendrá información de autenticación.
 export const AuthContext = createContext<AuthContextType | null>(null)
 
 type AuthProvidersProps = {
@@ -24,6 +25,7 @@ export function AuthProvider({ children }: AuthProvidersProps) {
     }
 
     return (
+        //Todo lo que esté dentro de este Provider podrá acceder a user, login y logout.
         <AuthContext.Provider value={{ user, login, logout }}>
             {children}
         </AuthContext.Provider>

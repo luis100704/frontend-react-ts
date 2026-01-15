@@ -5,6 +5,7 @@ import UserList from './components/users/UserList'
 import useUsers from './hooks/useUsers'
 import { useContext } from 'react'
 import { AuthContext } from './context/AuthContext'
+import ProtectedContent from './components/layout/ProtectedContent'
 
 function App() {
   const [clicks, setClicks] = useState(0)
@@ -89,13 +90,16 @@ function App() {
       {loading && <p>Cargando usuarios...</p>}
       {usersError && <p style={{ color: 'red' }}>{usersError}</p>}
 
-      <h2>Usuarios</h2>
+      <ProtectedContent>
+        <h2>Usuarios</h2>
 
-      <UserList
+        <UserList
         users={users}
         loading={loading}
         error={usersError}
-      />
+        />
+      </ProtectedContent>
+
 
       <Card
         title="Frontend"
