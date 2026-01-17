@@ -1,7 +1,7 @@
 
 type User = {
     id: number
-    name: string
+    username: string
     email: string
   }
   
@@ -24,7 +24,7 @@ type User = {
       <ul>
         {users.map((user) => (
           <li key={user.id}>
-            {user.name} – {user.email}
+            {user.username} – {user.email}
           </li>
         ))}
       </ul>

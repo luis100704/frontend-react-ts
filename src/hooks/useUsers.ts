@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
+import { AuthContext } from '../context/AuthContext'
 
 type User = {
   id: number
-  name: string
+  username: string
   email: string
 }
 
@@ -10,15 +11,22 @@ function useUsers() {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(false)
   const [usersError, setUsersError] = useState('')
+  const { token } = useContext(AuthContext)
 
   useEffect(() => {
+    if (!token) return
+  
     setLoading(true)
     setUsersError('')
-
-    fetch('https://jsonplaceholder.typicode.com/users')
+  
+    fetch('http://127.0.0.1:8000/api/users/', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Error al cargar usuarios')
+          throw new Error()
         }
         return response.json()
       })
@@ -26,12 +34,13 @@ function useUsers() {
         setUsers(data)
       })
       .catch(() => {
-        setUsersError('No se pudieron cargar los usuarios')
+        setUsersError('Error al cargar usuarios')
       })
       .finally(() => {
         setLoading(false)
       })
-  }, [])
+  }, [token])
+  
 
   return { users, loading, usersError }
 }

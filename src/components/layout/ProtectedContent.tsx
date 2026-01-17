@@ -6,9 +6,9 @@ type Props = {
 }
 
 function ProtectedContent({ children }: Props) {
-    const auth = useContext(AuthContext)
+    const { token } = useContext(AuthContext)
 
-    if (!auth || !auth.user) {
+    if (!token) {
         return <p>Debes iniciar sesión para ver este contenido</p>
     }
 

@@ -1,72 +1,55 @@
-import { useState, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import Header from './components/layout/Header'
 import Card from './components/ui/Card'
 import UserList from './components/users/UserList'
 import useUsers from './hooks/useUsers'
-import { useContext } from 'react'
 import { AuthContext } from './context/AuthContext'
 import ProtectedContent from './components/layout/ProtectedContent'
 
 function App() {
-  const [message, setMessage] = useState('Cargando...')
   const [name, setName] = useState('')
   const [error, setError] = useState('')
   const { users, loading, usersError } = useUsers()
+  const { token, login, logout } = useContext(AuthContext)
 
-  const auth = useContext(AuthContext)
+  async function handleLogin() {
+    const response = await fetch('http://127.0.0.1:8000/api/token/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: name,
+        password: 'Luisao_2004',
+      }),
+    })
 
-  if (!auth) {
-    return null
-  }
+    const data = await response.json()
 
-  const { user, login, logout } = auth
-
-  function handleSubmit() {
-    if (name.trim() === '') {
-      setError('El nombre no puede estar vacío')
-      return
+    if (data.access) {
+      login(data.access)
+    } else {
+      setError('Login incorrecto')
     }
-
-    setError('')
-    alert(`Nombre enviado: ${name}`)
-    setName('')
   }
-
-  useEffect(() => {
-    console.log('La aplicación se ha cargado')
-  }, [])
-  
-  useEffect(() => {
-    setTimeout(() => {
-      setMessage('Datos cargados correctamente')
-    }, 1500)
-  }, [])
   
   return (
     <div>
       <Header />
 
-      {user ? (
-        <div>
-          <p>Usuario logueado: {user}</p>
-          <button onClick={logout}>Logout</button>
-        </div>
-      ): (
-        <button onClick={() => login(name)}>Login</button>
-      )}
-
-      <div>
+      {!token ? (
+      <>
         <input
           type="text"
-          placeholder="Escribe tu nombre"
+          placeholder="Username"
           value={name}
           onChange={(e) => setName(e.target.value)}
-        />
-      </div>
-
-      <button onClick={handleSubmit}>
-        Enviar
-      </button>
+      />
+      <button onClick={handleLogin}>Login</button>
+      </>
+      ) : (
+        <button onClick={logout}>Logout</button>
+      )}
 
       {error && <p style={{ color: 'red'}}>{error}</p>}
 
@@ -95,8 +78,6 @@ function App() {
         title="Backend"
         description="API con Django y Django REST Framework"
       />
-
-      <p>{message}</p>
 
     </div>
   )

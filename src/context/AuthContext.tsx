@@ -1,32 +1,37 @@
 import { createContext, useState } from "react";
 
-type AuthContextType = {
-    user: string | null
-    login: (username: string) => void
+export type AuthContextType = {
+    token: string | null
+    login: (token: string) => void
     logout: () => void
 }
 
 //Creación de un canal global llamado AuthContext que contendrá información de autenticación.
-export const AuthContext = createContext<AuthContextType | null>(null)
+export const AuthContext = createContext<AuthContextType>({
+    token: null,
+    login: () => {},
+    logout: () => {},
+  })
+  
 
 type AuthProvidersProps = {
     children: React.ReactNode
 }
 
 export function AuthProvider({ children }: AuthProvidersProps) {
-    const [user, setUser] = useState<string | null>(null)
+    const [token, setToken] = useState<string | null>(null)
 
-    function login(username:string) {
-        setUser(username)
+    function login(newToken:string) {
+        setToken(newToken)
     }
 
     function logout() {
-        setUser(null)
+        setToken(null)
     }
 
     return (
         //Todo lo que esté dentro de este Provider podrá acceder a user, login y logout.
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ token, login, logout }}>
             {children}
         </AuthContext.Provider>
     )
