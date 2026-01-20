@@ -19,14 +19,18 @@ type AuthProvidersProps = {
 }
 
 export function AuthProvider({ children }: AuthProvidersProps) {
-    const [token, setToken] = useState<string | null>(null)
+    const [token, setToken] = useState<string | null>(
+        localStorage.getItem('token')
+    )
 
     function login(newToken:string) {
         setToken(newToken)
+        localStorage.setItem('token', newToken)
     }
 
     function logout() {
         setToken(null)
+        localStorage.removeItem('token')
     }
 
     return (
