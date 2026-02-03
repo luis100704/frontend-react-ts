@@ -27,7 +27,6 @@ Este proyecto forma parte de un ejercicio full stack junto con un backend desarr
 ```bash
 npm install
 
-### 2. Ejecutar el servidor de desarrollo
 npm run dev
 
 La aplicación estará disponible en:
@@ -42,5 +41,3 @@ https://github.com/Luis100704/backend-django-api
 
 
 📌 **Luego cambia el enlace del backend por el tuyo real.**
-
----
